@@ -1,0 +1,339 @@
+<!--
+Ultra Trivia - Sega
+@author Philip Van Raalte
+@date January 27, 2017
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <title>Ultra Trivia - Sega</title>
+        <!--Stylesheets-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Raleway|Exo+2|Roboto|Rock+Salt" rel="stylesheet">
+        <link rel="stylesheet" href="lib/materialize/css/materialize.min.css">
+        <style>
+            /*.middle {*/
+                /*margin-left: 35%;*/
+            /*}*/
+            html{
+                height:100%;
+                background-color: antiquewhite;
+            }
+            body{
+                min-height:100%;
+                display:flex;
+                flex-direction:column
+            }
+            #content{
+                flex:1
+            }
+            form {
+                width: 32%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #question {
+                font-size: 1.3rem;
+                line-height: 110%;
+                margin: .82rem 0 .656rem 0;
+            }
+            /*For medals */
+            .medal{
+                position: fixed;
+                bottom: 0px;
+                right:0px;
+                padding: 10px;
+                background-color: grey;
+                opacity: 0.95;
+                color: white;
+                margin: 1rem;
+                text-align: center;
+            }
+            /*For medals */
+            .disappear{
+                opacity:0;
+                transition:opacity 1.2s ease;
+                transition-delay: 1.8s;
+            }
+        </style>
+    </head>
+    <body>
+        <header class="naxbar-fixed">
+            <nav class="blue darken-3">
+                <div class="brand-logo center">
+                    <ul>
+                        <li>ULTRA TRIVIA - SEGA</li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <section id="content" class="container">
+            <div id="preloader" class="center">
+                <br><br><br><br>
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-green-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                    </div>
+                </div>
+
+                <br>
+            </div>
+            <div id="main" class="hiddendiv">
+                <p id="question" class="center"></p>
+                <div class="divider black"></div>
+                <form action="#">
+                    <p class="middle">
+                        <input name="answers" type="radio" id="test1" />
+                        <label id="a1" for="test1"></label>
+                    </p>
+                    <p class="middle">
+                        <input name="answers" type="radio" id="test2" />
+                        <label id="a2" for="test2"></label>
+                    </p>
+                    <p class="middle">
+                        <input name="answers" type="radio" id="test3"  />
+                        <label id="a3" for="test3"></label>
+                    </p>
+                    <p class="middle">
+                        <input name="answers" type="radio" id="test4"  />
+                        <label id="a4" for="test4"></label>
+                    </p>
+                </form>
+                <div class="center" style="margin-top: 10px;">
+                    <a id="btnNext" class="btn blue-grey darken-2">Next Question</a>
+                </div>
+                <p id="error" class="red-text center"></p>
+                <p id="info" class="center"></p>
+                <p id="seconds" class="center" style="margin: -14px;">0 Seconds</p>
+            </div>
+            <div id="end" class="hiddendiv">
+                <h5 class="center">End Game</h5>
+                <div class="divider black"></div>
+                <br>
+                <p class="center flow-text">
+                    <b id="percent">80%</b>
+                </p>
+                <br>
+                <div class="center">
+                    <a id="btnPlayAgain" class="btn blue-grey darken-2">Play Again</a>
+                </div>
+                <br>
+            </div>
+        </section>
+        <footer class="page-footer blue darken-3">
+            <div class="footer-copyright">
+                <div class="container center">
+                    © 2017 FIL1994
+                </div>
+            </div>
+        </footer>
+        <!--Scripts-->
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="lib/materialize/js/materialize.min.js"></script>
+        <script>
+            function QA () {
+                this.question = "When was the SG-1000 released in Japan?";
+                this.answers = ["1976", "1983", "1985", "1982"];
+                this.correct = 1;
+            }
+
+            var QAs = [];
+            var qa1 = new QA();
+            var qa2 = new QA();
+            qa2.question = "When was Sega founded?";
+            qa2.answers = ["1960", "1978", "1889", "1980"];
+            qa2.correct = 0;
+            var qa3 = new QA();
+            qa3.question = "What is the sequel to Zaxxon?";
+            qa3.answers = ["Zaxxon 2", "Zaxxon II", "Super Zaxxon", "Zaxxon 2000"];
+            qa3.correct = 2;
+            var qa4 = new QA();
+            qa4.question = "When was the Master System released in Europe";
+            qa4.answers = ["1985", "1987", "1986", "1988"];
+            qa4.correct = 1;
+            var qa5 = new QA();
+            qa5.question = "What was the Master System called in Japan?";
+            qa5.answers = ["Super SG", "Sega Mark III", "Sega Entertainment System", "SG-2500"];
+            qa5.correct = 1;
+            var qa6 = new QA();
+            qa6.question = "Which of the following was a launch game for the Master System in the US?";
+            qa6.answers = ["R-Type", "Galaga", "Hang-On", "Wonder Boy"];
+            qa6.correct = 2;
+            var qa7 = new QA();
+            qa7.question = "Who is the designer of Out Run?";
+            qa7.answers = ["David Rosen", "Naoto Ohshima", "Hitoshi Yamagami", "Yu Suzuki"];
+            qa7.correct = 3;
+            var qa8 = new QA();
+            qa8.question = "How many stages does Fantasy Zone have?";
+            qa8.answers = ["8", "20", "5", "10"];
+            qa8.correct = 0;
+            var qa9 = new QA();
+            qa9.question = "Who is the antagonist in Alex Kidd in Miracle World?";
+            qa9.answers = ["Nurari", "Prince Egle", "Niban", "Janken"];
+            qa9.correct = 3;
+            var qa10 = new QA();
+            qa10.question = "Where does Golden Axe take place?";
+            qa10.answers = ["Adder", "Yuria", "Kemonanji", "Miracle World"];
+            qa10.correct = 1;
+            var qa11 = new QA();
+            qa11.question = "When was the Sega Genesis released in North America?";
+            qa11.answers = ["1991", "1987", "1989", "1990"];
+            qa11.correct = 2;
+            var qa12 = new QA();
+            qa12.question = "How many units of the Genesis did Sega aim to sell in its first year?";
+            qa12.answers = ["1,000,000", "500,000", "250,000", "2,000,000"];
+            qa12.correct = 0;
+            var qa13 = new QA();
+            qa13.question = "What genre did Katz think was the key to winning the American audience?";
+            qa13.answers = ["Platformer", "Racing", "Sports", "Shooter"];
+            qa13.correct = 2;
+            var qa14 = new QA();
+            qa14.question = 'Which game was designed to be a "Mario-killer"?';
+            qa14.answers = ["Sonic the Hedgehog", "Ecco the Dolphin", "Ristar", "Shinobi"];
+            qa14.correct = 0;
+            var qa15 = new QA();
+            qa15.question = "Who was the director of The Revenge of Shinobi?";
+            qa15.answers = ["Noriyoshi Ohba", "Yu Suzuki", "Hirokazu Yasuhara", "Naoto Ohshima"];
+            qa15.correct = 0;
+            var qa16 = new QA();
+            qa16.question = "Who is the antagonist in Sonic the Hedgehog?";
+            qa16.answers = ["Mr. Eggman", "Tails", "Dr. Ivo Robotnik", "Janken"];
+            qa16.correct = 2;
+            var qa17 = new QA();
+            qa17.question = "Sonic the Hedgehog composer, Masato Nakamura, was the bassist of which band?";
+            qa17.answers = ["Arashi", "Dreams Come True", "Do As Infinity", "Zard"];
+            qa17.correct = 1;
+            var qa18 = new QA();
+            qa18.question = "When was the Game Gear released in Europe?";
+            qa18.answers = ["1993", "1990", "1991", "1995"];
+            qa18.correct = 2;
+            var qa19 = new QA();
+            qa19.question = "Which of the following was not a launch game for the Game Gear in the US?";
+            qa19.answers = ["Revenge of Drancon", "Psychic World", "Columns", "Sonic Chaos"];
+            qa19.correct = 3;
+            var qa20 = new QA();
+            qa20.question = "Kalinske tried to make a deal with Silicon Graphics for a graphics chip. Who rejected the proposal?";
+            qa20.answers = ["Sega of Japan", "Sega of America", "Silicon Graphics", "Sony"];
+            qa20.correct = 0;
+            var qa21 = new QA();
+            qa21.question = "Which game was cancelled?";
+            qa21.answers = ["Super Sonic 3D", "Golden Axe III", "Sonic X-treme", "Shinobi V"];
+            qa21.correct = 2;
+            var qa22 = new QA();
+            qa22.question = "When was the Dreamcast released in Europe?";
+            qa22.answers = ["1998", "2000", "2002", "1999"];
+            qa22.correct = 3;
+            var qa23 = new QA();
+            qa23.question = "Which of the following was not a launch game for the Dreamcast in the US?";
+            qa23.answers = ["Hydro Thunder", "Jet Set Radio", "Soulcalibur", "Power Stone"];
+            qa23.correct = 1;
+            var qa24 = new QA();
+            qa24.question = "Who is the designer of Shenmue?";
+            qa24.answers = ["Naoto Ohshima", "Yu Suzuki", "Hideaki Itsuno", "Masayoshi Kikuchi"];
+            qa24.correct = 1;
+            var qa25 = new QA();
+            qa25.question = "Which platform is Crazy Taxi not available on?";
+            qa25.answers = ["Dreamcast", "PlayStation 2", "GameCube", "Saturn"];
+            qa25.correct = 3;
+
+            QAs.push(qa2, qa1, qa3, qa4, qa5, qa6, qa7, qa8, qa9, qa10, qa11, qa12, qa13, qa14, qa15, qa16, qa17, qa18, qa19, qa20, qa21, qa22, qa23, qa24, qa25);
+
+            var qaIndex = 0;
+            var correctAnswers = 0;
+
+			populateQA();
+			updateInfo();
+			$('#preloader').addClass('hiddendiv');
+			$('#main').removeClass('hiddendiv');
+
+            var seconds = 0;
+            $(document).ready(function(){
+                setInterval(function(){
+                    seconds++;
+                    $('#seconds').html(seconds + " Seconds");
+                }, 1000);
+            });
+
+            $('#btnNext').on('click', function(){
+                if(qaIndex < QAs.length){
+                    var radios = document.getElementsByName('answers');
+                    for (var i = 0; i < radios.length; i++) {
+                        if (radios[i].checked) {
+                            $('#error').html("");
+                            var answer = i;
+
+                            if (i == QAs[qaIndex].correct) {
+                                correctAnswers++;
+                                Materialize.toast('correct', 700, 'rounded');
+                            }
+                            else{
+                                Materialize.toast('incorrect', 700, 'rounded');
+                            }
+                            console.log(correctAnswers + "/" + (qaIndex + 1));
+                            qaIndex++;
+                            populateQA();
+                            updateInfo();
+                            break;
+                        }
+                        else if (i == radios.length - 1) {
+                            //no button selected
+                            $('#error').html("You must select an answer");
+                        }
+                    }
+                }
+            });
+
+            $('#btnPlayAgain').on('click', function(){
+               playAgain();
+            });
+
+            function populateQA(){
+                if(qaIndex < QAs.length) {
+                    $('#question').html(QAs[qaIndex].question);
+                    $('#a1').html(QAs[qaIndex].answers[0]);
+                    $('#a2').html(QAs[qaIndex].answers[1]);
+                    $('#a3').html(QAs[qaIndex].answers[2]);
+                    $('#a4').html(QAs[qaIndex].answers[3]);
+                }
+                else{
+                    console.log("END GAME");
+                    $('#main').addClass('hiddendiv');
+                    var score = Math.round((correctAnswers / qaIndex) * 100);
+                    $('#percent').html(score + "%");
+                    $('#end').removeClass('hiddendiv');
+
+                    var endScore = (450 - seconds) / 0.5;
+                    if(endScore < 1) endScore = 1;
+                    endScore = correctAnswers * endScore;
+                    console.log("END SCORE: " + endScore);
+                }
+            }
+            function updateInfo(){
+                var questionNum = (qaIndex + 1);
+                if(questionNum > QAs.length)
+                        questionNum = QAs.length;
+                var info = "Question: " + questionNum + " of " + QAs.length + "<br>Score: " + correctAnswers + "/" + qaIndex;
+                $('#info').html(info);
+            }
+            function playAgain(){
+                qaIndex = 0;
+                correctAnswers = 0;
+                seconds = 0;
+
+                $('#end').addClass('hiddendiv');
+                $('#main').removeClass('hiddendiv');
+
+                populateQA();
+                updateInfo();
+            }
+        </script>
+    </body>
+</html>
